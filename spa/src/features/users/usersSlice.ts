@@ -6,6 +6,7 @@ export interface Base {
   name: string;
   email: string;
   role: string;
+  saloonId: number;
 }
 
 export interface User extends Base {
@@ -18,6 +19,7 @@ const initialState: User = {
   email: "",
   role: "USER",
   logged: false,
+  saloonId: 0,
 };
 
 export const userSlice = createSlice({
@@ -25,12 +27,13 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action: PayloadAction<Base>) => {
-      const { id, name, email, role } = action.payload;
+      const { id, name, email, role, saloonId } = action.payload;
       state.id = id;
       state.name = name;
       state.email = email;
       state.logged = true;
       state.role = role;
+      state.saloonId = saloonId;
     },
     logout: (state) => {
       state.id = initialState.id;

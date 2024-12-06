@@ -12,6 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { Home } from "./features/home";
 import { Login } from "./features/login";
+import { Partners } from "./features/partners";
 import { login, selectUser } from "./features/users/usersSlice";
 import { DefaultLayout } from "./layout/default.layout";
 
@@ -21,28 +22,45 @@ export interface Payload {
   name: string;
   email: string;
   role: string;
+  saloonId: number;
 }
 
-export const AppRoutes = () => {
+interface AppRoutesToggle {
+  toggle: any;
+}
+
+export const AppRoutes = (props: AppRoutesToggle) => {
   return (
     <Routes>
       <Route
+        path="/login"
         element={
           <CheckLogin>
             <Login />
           </CheckLogin>
         }
-        path="/"
       />
+
       <Route
+        path="/"
         element={
           <RequireAuth>
-            <DefaultLayout />
+            <DefaultLayout toggle={props.toggle} />
           </RequireAuth>
         }
       >
-        <Route path="/home" element={<Home />} />
+        <Route index element={<Home />} />
+        <Route path="/partners" element={<Partners />} />
       </Route>
+
+      <Route
+        path="*"
+        element={
+          <RequireAuth>
+            <Navigate to="/" />
+          </RequireAuth>
+        }
+      />
     </Routes>
   );
 };
@@ -78,7 +96,8 @@ const CheckLogin = ({ children }: { children: JSX.Element }) => {
             id: token.sub,
             email: token.email,
             name: token.name,
-            role: "USER",
+            role: token.role,
+            saloonId: token.saloonId,
           })
         );
       } else {

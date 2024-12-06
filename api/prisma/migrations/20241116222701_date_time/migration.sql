@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `actions` MODIFY `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

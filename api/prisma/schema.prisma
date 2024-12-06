@@ -1,11 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
+
 
 model Token {
   id        Int       @id @default(autoincrement())
@@ -33,13 +34,111 @@ model User {
   password  String    @db.VarChar(300)
 
   role      Role      @default(USER)
+  saloonId  Int?
 
   tokens    Token[]
+  services  Services[]
+
+  saloon    Saloon?    @relation(fields: [saloonId], references: [id], onDelete: NoAction)
 
   @@map("users")
+}
+
+model Saloon {
+  id          Int       @id @default(autoincrement())
+
+  createdAt   DateTime  @default(now()) @map("create_time") @db.Timestamp(0)
+  updatedAt   DateTime? @map("update_time") @db.Timestamp(0)
+
+  name        String    @db.Text()
+  workDays    Int       @default(62)
+  opening     Int
+  closing     Int
+
+  scheduled   Scheduled[]
+  closedDays  ClosedDays[]
+  partners    User[]
+
+  @@map("saloons")
+}
+
+model ClosedDays {
+  id        Int       @id @default(autoincrement())
+  saloonId  Int
+  closedAt  DateTime  @db.Date()
+
+  saloon    Saloon    @relation(fields: [saloonId], references: [id], onDelete: NoAction)
+
+  @@map("closed_days")
+}
+
+model Conversation {
+    id              Int         @id @default(autoincrement())
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+    active          Boolean     @default(true)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+
+    actions         ConversationActions[]
+
+    @@map("conversations")
+}
+
+model ConversationActions {
+    id              Int         @id @default(autoincrement())
+    createdAt       DateTime    @default(now()) @map("create_time") @db.DateTime(2)
+    conversationId  Int
+    conversation    Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+    action          String      @db.Text()
+    nextAction      String      @db.Text() 
+
+    @@map("actions")
+}
+
+model ServiceCategory {
+  id                Int         @id @default(autoincrement())
+  name              String      @db.Text()
+
+  services           Services[]
+
+  @@map("categories")
+}
+
+model Services {
+    id              Int         @id @default(autoincrement())
+    name            String      @db.Text()
+    time            Int
+    price           Float
+    categoryId      Int
+
+    category        ServiceCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    scheduled       Scheduled[]
+    partners        User[]
+
+    @@map("services")
+}
+
+model Scheduled {
+    id              Int         @id @default(autoincrement())
+    active          Boolean     @default(true)
+    authorName      String      @db.Text()
+    authorNumber    String      @db.Text()
+    startTime       DateTime
+    endTime         DateTime
+    pending         Boolean     @default(true)
+    saloonId        Int
+    serviceId       Int
+
+    saloon          Saloon      @relation(fields: [saloonId], references: [id], onDelete: Cascade)
+
+    service         Services    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+    @@map("scheduled")
 }
 
 enum Role {
   USER
   ADMIN
+  PARTNER
 }

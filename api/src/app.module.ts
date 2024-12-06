@@ -1,23 +1,22 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
-import { LoggerMiddleware } from './middleware/logger.middleware';
+import { SaloonModule } from './saloon/saloon.module';
+import { SaloonServicesModule } from './saloonServices/saloonServices.module';
+import { ScheduleModule } from './scheduled/schedule.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [
+    AuthModule,
+    UsersModule,
+    SaloonModule,
+    SaloonServicesModule,
+    ScheduleModule,
+  ],
   controllers: [],
   providers: [
     { provide: APP_PIPE, useValue: new ValidationPipe({ transform: true }) },
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('');
-  }
-}
+export class AppModule {}

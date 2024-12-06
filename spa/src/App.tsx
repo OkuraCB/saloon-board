@@ -1,7 +1,11 @@
 import { AppRoutes } from "./routes";
 
-const App = () => {
-	return <AppRoutes />;
+interface AppProps {
+  toggle: any;
+}
+
+const App = (props: AppProps) => {
+  return <AppRoutes toggle={props.toggle} />;
 };
 
 export default App;
