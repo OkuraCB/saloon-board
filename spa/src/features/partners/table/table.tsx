@@ -3,10 +3,11 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../users/usersSlice";
 import { listPartners, selectPartners } from "../partnersSlice";
+import { CreatePartner } from "./create";
 
 export const PartnersTable = () => {
   const columns = useMemo(
@@ -26,6 +27,8 @@ export const PartnersTable = () => {
   const data = useAppSelector(selectPartners);
   const user = useAppSelector(selectUser);
 
+  const [create, setCreate] = useState<boolean>(false);
+
   useEffect(() => {
     dispatch(listPartners(user.saloonId));
   }, []);
@@ -43,7 +46,7 @@ export const PartnersTable = () => {
     renderTopToolbarCustomActions: () => (
       <Grid container spacing={2}>
         <Grid item>
-          <Button variant="contained" onClick={() => console.log("teste")}>
+          <Button variant="contained" onClick={() => setCreate(true)}>
             Adicionar parceiro
           </Button>
         </Grid>
@@ -51,5 +54,10 @@ export const PartnersTable = () => {
     ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <>
+      <MaterialReactTable table={table} />
+      <CreatePartner open={create} onClose={() => setCreate(false)} />
+    </>
+  );
 };

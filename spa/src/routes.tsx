@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { Home } from "./features/home";
 import { Login } from "./features/login";
 import { Partners } from "./features/partners";
+import { PartnersTable } from "./features/partners/table/table";
 import { login, selectUser } from "./features/users/usersSlice";
 import { DefaultLayout } from "./layout/default.layout";
 
@@ -51,6 +52,15 @@ export const AppRoutes = (props: AppRoutesToggle) => {
       >
         <Route index element={<Home />} />
         <Route path="/partners" element={<Partners />} />
+        <Route
+          path="/teste"
+          element={
+            <>
+              teste
+              <PartnersTable />
+            </>
+          }
+        />
       </Route>
 
       <Route

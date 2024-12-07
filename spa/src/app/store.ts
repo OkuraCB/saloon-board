@@ -1,6 +1,7 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import partnersReducer from "../features/partners/partnersSlice";
 import scheduleReducer from "../features/scheduled/schedulesSlice";
+import servicesReducer from "../features/services/serviceSlice";
 import userReducer from "../features/users/usersSlice";
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     user: userReducer,
     scheduled: scheduleReducer,
     partners: partnersReducer,
+    services: servicesReducer,
   },
 });
 

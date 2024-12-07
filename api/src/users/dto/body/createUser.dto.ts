@@ -1,6 +1,17 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
+  @IsNotEmpty({ message: 'Saloon ID should not be empty' })
+  @IsNumber()
+  saloonId: number;
+
   @IsNotEmpty({ message: 'Name should not be empty' })
   @IsString()
   name: string;
@@ -12,4 +23,8 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Password should not be empty' })
   @IsString()
   password: string;
+
+  @IsOptional()
+  @IsArray()
+  services: Array<number>;
 }

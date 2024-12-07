@@ -67,4 +67,13 @@ export class SaloonServicesService {
 
     return deleted;
   }
+
+  async addServicesToUser(userId: number, services: Array<number>) {
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { services: { connect: services.map((id) => ({ id })) || [] } },
+    });
+
+    return updatedUser;
+  }
 }

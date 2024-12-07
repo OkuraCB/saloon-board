@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "@reduxjs/toolkit/query";
-import {
-  listPendingScheduledApi,
-  listScheduledApi,
-} from "../../api/scheduled/list";
+import { listServicesApi } from "../../api/services/list";
+import { RootState } from "../../app/store";
 import { User } from "../users/usersSlice";
 
 export interface ServiceCategory {
@@ -30,54 +27,33 @@ const initialState: IInitial = {
   status: "idle",
 };
 
-export const listPartners = createAsyncThunk(
-  "partners/listPartners",
-  async (id: number) => {
-    const res = await listScheduledApi(id);
+export const listServices = createAsyncThunk(
+  "services/listServices",
+  async () => {
+    const res = await listServicesApi();
     return res.data;
   }
 );
 
-export const listPendingScheduled = createAsyncThunk(
-  "scheduled/listPendingScheduled",
-  async (id: number) => {
-    const res = await listPendingScheduledApi(id);
-    return res.data;
-  }
-);
-
-export const scheduleSlice = createSlice({
-  name: "schedule",
+export const servicesSlice = createSlice({
+  name: "services",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(listScheduled.rejected, (state) => {
+      .addCase(listServices.rejected, (state) => {
         state.status = "idle";
       })
-      .addCase(listScheduled.pending, (state) => {
+      .addCase(listServices.pending, (state) => {
         state.status = "pending";
       })
-      .addCase(listScheduled.fulfilled, (state, { payload }: any) => {
+      .addCase(listServices.fulfilled, (state, { payload }: any) => {
         state.status = "idle";
-        state.scheduled = payload;
-      });
-
-    builder
-      .addCase(listPendingScheduled.rejected, (state) => {
-        state.status = "idle";
-      })
-      .addCase(listPendingScheduled.pending, (state) => {
-        state.status = "pending";
-      })
-      .addCase(listPendingScheduled.fulfilled, (state, { payload }: any) => {
-        state.status = "idle";
-        state.pending = payload;
+        state.services = payload;
       });
   },
 });
 
-export const selectScheduled = (state: RootState) => state.scheduled.scheduled;
-export const selectPending = (state: RootState) => state.scheduled.pending;
+export const selectServices = (state: RootState) => state.services.services;
 
-export default scheduleSlice.reducer;
+export default servicesSlice.reducer;

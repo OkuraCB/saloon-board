@@ -1,6 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { listPartnersApi } from "../../api/partners/list";
+import { createPartnerApi } from "../../api/users/create";
 import { RootState } from "../../app/store";
+
+export interface NewPartner {
+  saloonId: number;
+  name: string;
+  email: string;
+  password: string;
+  services: Array<number>;
+}
 
 interface Partner {
   partnerName: string;
@@ -24,6 +33,14 @@ export const listPartners = createAsyncThunk(
   "partners/listPartners",
   async (id: number) => {
     const res = await listPartnersApi(id);
+    return res.data;
+  }
+);
+
+export const createPartner = createAsyncThunk(
+  "partners/createPartner",
+  async (data: NewPartner) => {
+    const res = await createPartnerApi(data);
     return res.data;
   }
 );
@@ -58,6 +75,17 @@ export const partnersSlice = createSlice({
         );
 
         state.partners = flat;
+      });
+
+    builder
+      .addCase(createPartner.rejected, (state) => {
+        state.status = "idle";
+      })
+      .addCase(createPartner.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(createPartner.fulfilled, (state) => {
+        state.status = "idle";
       });
   },
 });

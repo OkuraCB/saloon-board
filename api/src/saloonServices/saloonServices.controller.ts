@@ -16,7 +16,7 @@ import { ServiceDto } from './dto/expose/service.dto';
 import { SaloonServicesService } from './saloonServices.service';
 
 @UseGuards(JwtAuthGuard)
-@Controller('service')
+@Controller('services')
 export class SaloonServicesController {
   constructor(private saloonServicesService: SaloonServicesService) {}
 

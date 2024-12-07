@@ -55,7 +55,7 @@ export class AuthService {
   }
 
   async create(user: CreateUserDto) {
-    const { name, email, password } = user;
+    const { name, email, password, saloonId } = user;
 
     const salt = await bcrypt.genSalt();
     const hashed = await bcrypt.hash(password, salt);
@@ -66,6 +66,8 @@ export class AuthService {
       password: hashed,
     };
 
-    return await this.prisma.user.create({ data: newUser });
+    return await this.prisma.user.create({
+      data: { ...newUser, saloon: { connect: { id: saloonId } } },
+    });
   }
 }

@@ -102,18 +102,11 @@ export const Login = () => {
                   type="submit"
                   variant="contained"
                   size="large"
+                  fullWidth
                   disabled={loading}
                   style={{ marginRight: 43 }}
                 >
                   Entrar
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={() => navigate("/")}
-                  color="secondary"
-                >
-                  Voltar
                 </Button>
               </form>
             </Box>
