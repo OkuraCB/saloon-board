@@ -38,12 +38,16 @@ export class SaloonServicesService {
   }
 
   async createService(body: CreateServiceDto) {
+    const category = await this.prisma.serviceCategory.findFirst({
+      where: { name: body.category },
+    });
+
     const newService = await this.prisma.services.create({
       data: {
         name: body.name,
         time: body.time,
         price: body.price,
-        category: { connect: { id: body.categoryId } },
+        category: { connect: category },
       },
     });
 

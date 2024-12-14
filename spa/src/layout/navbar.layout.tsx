@@ -63,8 +63,8 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>((props, ref) => {
           <Link to="/partners" style={getLinkStyles("/partners")}>
             Parceiros
           </Link>
-          <Link to="/teste" style={getLinkStyles("/teste")}>
-            Teste
+          <Link to="/services" style={getLinkStyles("/teste")}>
+            Serviços
           </Link>
         </nav>
       </Grid>

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `actions` MODIFY `create_time` DATETIME(2) NOT NULL DEFAULT CURRENT_TIMESTAMP(2);

@@ -10,9 +10,10 @@ export class CreateServiceDto {
   time: number;
 
   @IsNotEmpty({ message: 'Price should not be empty' })
+  @IsNumber()
   price: number;
 
   @IsNotEmpty({ message: 'Category should not be empty' })
-  @IsNumber()
-  categoryId: number;
+  @IsString()
+  category: string;
 }

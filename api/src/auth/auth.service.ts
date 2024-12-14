@@ -65,9 +65,13 @@ export class AuthService {
       email: email,
       password: hashed,
     };
-
-    return await this.prisma.user.create({
-      data: { ...newUser, saloon: { connect: { id: saloonId } } },
-    });
+    if (saloonId)
+      return await this.prisma.user.create({
+        data: { ...newUser, saloon: { connect: { id: saloonId } } },
+      });
+    else
+      return await this.prisma.user.create({
+        data: newUser,
+      });
   }
 }

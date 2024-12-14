@@ -1,36 +1,53 @@
+import { Button, Grid } from "@mui/material";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { selectUser } from "../../users/usersSlice";
-import { listPendingScheduled, selectPending } from "../schedulesSlice";
+import { listServices, selectServices } from "../serviceSlice";
+import { CreateServices } from "./create";
 
 export const ServicesTable = () => {
   const columns = useMemo(
     () => [
-      { header: "Nome", accessorKey: "authorName" },
-      { header: "Numero", accessorKey: "authorNumber" },
+      { header: "Serviço", accessorKey: "name" },
+      { header: "Tempo estimado (minutos)", accessorKey: "time" },
+      { header: "Preço R$", accessorKey: "price" },
     ],
     []
   );
 
+  const [create, setCreate] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
-  const data = useAppSelector(selectPending);
-  const user = useAppSelector(selectUser);
+  const data = useAppSelector(selectServices);
 
   useEffect(() => {
-    dispatch(listPendingScheduled(user.saloonId));
+    dispatch(listServices());
   }, []);
 
   const table = useMaterialReactTable({
     columns,
-    data, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-    enableRowSelection: true, //enable some features
-    enableColumnOrdering: true, //enable a feature for all columns
-    enableGlobalFilter: false, //turn off a feature
+    data,
+    enableRowSelection: true,
+    enableColumnOrdering: true,
+    enableGlobalFilter: false,
+    renderTopToolbarCustomActions: () => (
+      <Grid container spacing={2}>
+        <Grid item>
+          <Button variant="contained" onClick={() => setCreate(true)}>
+            Adicionar Serviço
+          </Button>
+        </Grid>
+      </Grid>
+    ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <>
+      <MaterialReactTable table={table} />
+      <CreateServices open={create} onClose={() => setCreate(false)} />
+    </>
+  );
 };

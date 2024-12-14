@@ -10,6 +10,7 @@ import {
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Saloon ID should not be empty' })
   @IsNumber()
+  @IsOptional()
   saloonId: number;
 
   @IsNotEmpty({ message: 'Name should not be empty' })

@@ -30,16 +30,6 @@ export class SaloonServicesController {
     }
   }
 
-  @Get('/category')
-  @Serialize(CategoryDto)
-  async listByCategory() {
-    try {
-      return await this.saloonServicesService.listByCategories();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   @Post()
   @Serialize(ServiceDto)
   async addNewService(@Body() body: CreateServiceDto) {
@@ -50,7 +40,17 @@ export class SaloonServicesController {
     }
   }
 
-  @Post()
+  @Get('/category')
+  @Serialize(CategoryDto)
+  async listByCategory() {
+    try {
+      return await this.saloonServicesService.listByCategories();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  @Post('/category')
   @Serialize(CategoryDto)
   async addNewCategory(@Body() body: CreateCategoryDto) {
     try {
